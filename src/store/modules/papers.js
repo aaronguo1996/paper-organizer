@@ -1,22 +1,23 @@
+import paperOperator from '../../api/paperOperator'
+
 // initial state
 // shape: [{ id, {paper obj}}]
 const state = {
-    literatures: [],
+    all: [],
     currSelections: [],
 }
 
 // getters
-const getters = {
-    literatureDetails: (state, getters) => {
-        return state.literatures;
-    },
-
-    selectedLiteratures: (state, getters) => {
-    }
-}
+const getters = {}
 
 // actions
 const actions = {
+    getAllPapers ({ commit }) {
+        paperOperator.getPapers(papers => {
+            commit('setPapers', papers)
+        })
+    },
+
     addPaperToDatabase ({commit, state}, paper) {
     },
 
@@ -29,6 +30,10 @@ const actions = {
 
 // mutations
 const mutations = {
+    setPapers (state, papers) {
+        state.all = papers
+    },
+
     pushPaperToLiterature (state, {id}) {
     },
 
