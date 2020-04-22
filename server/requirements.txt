@@ -1,0 +1,2 @@
+bibtexparser
+flask_cors

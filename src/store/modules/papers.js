@@ -18,13 +18,25 @@ const actions = {
         })
     },
 
-    addPaperToDatabase ({commit, state}, paper) {
+    addPaperToDatabase () {
     },
 
-    deletePaperFromDatabase ({commit, state}, paper) {
+    deletePaperFromDatabase () {
     },
 
-    addPaperToSelection ({commit, state}, paper) {
+    addPaperToSelection () {
+    },
+
+    uploadByBibTex({commit}, file) {
+        return paperOperator.uploadBibTex(file)
+            .then(bibtexDatabase => {
+                console.log(bibtexDatabase);
+                commit('addFromBibTex', JSON.parse(bibtexDatabase));
+            },
+            error => {
+                console.log(error);
+                Promise.reject(error);
+            });
     },
 }
 
@@ -34,14 +46,18 @@ const mutations = {
         state.all = papers
     },
 
-    pushPaperToLiterature (state, {id}) {
+    pushPaperToLiterature () {
     },
 
     // maybe do not need
-    markPaperSelected(state, {id}) {
+    markPaperSelected() {
     },
 
-    removePaperFromLiterature (state, {id}) {
+    removePaperFromLiterature () {
+    },
+
+    addFromBibTex(state, db) {
+        state.all = state.all.concat(db);
     },
 }
 

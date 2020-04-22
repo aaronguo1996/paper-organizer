@@ -1,6 +1,7 @@
 <template>
     <b-container class="px-3">
         <NewEntryForm/>
+        <BibTexer/>
         <b-container class="border-bottom mb-3">
             <b-row>
                 <b-col cols="2">
@@ -12,7 +13,7 @@
                             <b-icon-plus></b-icon-plus>
                             Add New Entry
                         </b-button>
-                        <b-button variant="outline-primary" size="sm" class="mr-1">
+                        <b-button variant="outline-primary" size="sm" class="mr-1" v-b-modal.modal-upload-bibtex>
                             <b-icon-upload class="mr-1"/>
                             Upload BibTex
                         </b-button>
@@ -41,12 +42,14 @@
 <script>
 import Grid from './Grid.vue'
 import NewEntryForm from './NewEntryForm.vue'
+import BibTexer from './BibTexer.vue'
 
 export default {
     name: 'AllPapers',
     components: {
         Grid,
-        NewEntryForm
+        NewEntryForm,
+        BibTexer,
     },
     methods: {
         toSearchBar () {

@@ -66,18 +66,18 @@
                             class="text-truncate"
                             v-if="selectedKeys.includes('title')"
                             >{{paper.title}}</b-col>
-                        <b-col v-if="selectedKeys.includes('first_author')">{{paper.authors[0]}}</b-col>
-                        <b-col v-if="selectedKeys.includes('last_author')">{{paper.authors[paper.authors.length - 1]}}</b-col>
+                        <b-col v-if="selectedKeys.includes('first_author') && paper.author">{{paper.author[0]}}</b-col>
+                        <b-col v-if="selectedKeys.includes('last_author')">{{paper.authors[paper.author.length - 1]}}</b-col>
                         <b-col
-                            v-if="selectedKeys.includes('authors')"
+                            v-if="selectedKeys.includes('author')"
                             class="text-truncate text-nowrap"
-                            >{{paper.authors.join("; ")}}</b-col>
+                            >{{paper.author.join("; ")}}</b-col>
                         <b-col
                             class="text-nowrap text-truncate"
-                            v-if="selectedKeys.includes('tags')"
+                            v-if="selectedKeys.includes('keywords')"
                             >
                             <b-badge
-                                v-for="t in paper.tags"
+                                v-for="t in paper.keywords"
                                 :key="t"
                                 variant="info"
                                 class="mr-1"
