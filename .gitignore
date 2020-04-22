@@ -21,3 +21,4 @@ yarn-error.log*
 *.sw?
 
 server/papers/
+server/__pycache__/
