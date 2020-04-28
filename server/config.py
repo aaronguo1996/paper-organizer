@@ -1,0 +1,1 @@
+DATABASE = 'papers.db'

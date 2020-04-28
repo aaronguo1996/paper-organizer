@@ -4,6 +4,7 @@ import paperOperator from '../../api/paperOperator'
 // shape: [{ id, {paper obj}}]
 const state = {
     all: [],
+    uploadState: null,
     currSelections: [],
 }
 
@@ -13,9 +14,10 @@ const getters = {}
 // actions
 const actions = {
     getAllPapers ({ commit }) {
-        paperOperator.getPapers(papers => {
-            commit('setPapers', papers)
-        })
+        paperOperator.getPapers()
+            .then(papers => {
+                commit('setPapers', JSON.parse(papers));
+            })
     },
 
     addPaperToDatabase () {
@@ -36,8 +38,17 @@ const actions = {
             error => {
                 console.log(error);
                 Promise.reject(error);
+                commit('setUploadError');
             });
     },
+
+    resetUploadState({commit}) {
+        commit('setUploadError');
+    },
+
+    updatePaperInfo({commit}, {pid, paper}) {
+        commit('setPaperInfo', {pid, paper});
+    }
 }
 
 // mutations
@@ -58,6 +69,16 @@ const mutations = {
 
     addFromBibTex(state, db) {
         state.all = state.all.concat(db);
+        state.uploadState = true;
+    },
+
+    setUploadError(state) {
+        state.uploadState = false;
+    },
+
+    setPaperInfo(state, {pid, paper}) {
+        const idx = state.all.findIndex(elmt => elmt.id === pid);
+        state.all[idx] = paper;
     },
 }
 

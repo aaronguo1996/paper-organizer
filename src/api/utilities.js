@@ -21,3 +21,11 @@ export function abortableFetch(request, opts) {
       ready: fetch(request, { ...opts, signal })
     };
 }
+
+export function removeItemOnce(arr, cond) { 
+    var index = arr.findIndex(cond);
+    if (index > -1) {
+        arr.splice(index, 1);
+    }
+    return arr;
+}

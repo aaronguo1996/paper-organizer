@@ -2,6 +2,8 @@
     <b-modal
         id="modal-upload-bibtex"
         title="Upload BibTex File"
+        @hidden="resetModal"
+        @show="resetModal"
         hide-footer>
         <b-form-group
             label="BibTex file"
@@ -14,6 +16,7 @@
                 placeholder="Choose a file or drop it here..."
                 drop-placeholder="Drop file here..."
                 required/>
+            <p v-if="uploadState" class="valid-feedback">Upload Success</p>
         </b-form-group>
         <b-button variant="outline-primary" size="sm" @click="uploadBibtex(bibtexFile)">
             <b-icon-upload class="mr-1"/>Upload
@@ -22,7 +25,7 @@
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
+    import {mapState, mapActions} from 'vuex'
 
     export default {
         data() {
@@ -30,10 +33,19 @@
                 bibtexFile: null
             }
         },
+        computed: {
+            ...mapState({
+                uploadState: state => state.papers.uploadState
+            })
+        },
         methods: {
             ...mapActions('papers', {
-                uploadBibtex: 'uploadByBibTex'
-            })
+                uploadBibtex: 'uploadByBibTex',
+                resetUploadState: 'resetUploadState'
+            }),
+            resetModal() {
+                this.resetUploadState();
+            }
         }
     }
 </script>

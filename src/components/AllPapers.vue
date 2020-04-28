@@ -1,5 +1,5 @@
 <template>
-    <b-container class="px-3">
+    <b-container id="all-papers" class="pr-3">
         <NewEntryForm/>
         <BibTexer/>
         <b-container class="border-bottom mb-3">
