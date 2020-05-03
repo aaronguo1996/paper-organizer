@@ -7,7 +7,7 @@
 
 <script>
 import SideBar from './components/SideBar.vue'
-import AllPapers from './components/AllPapers.vue'
+import AllPapers from './components/papers/AllPapers.vue'
 
 export default {
   name: 'App',

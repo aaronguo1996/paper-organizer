@@ -64,3 +64,9 @@ def update_one_paper(db, criteria, paper):
 def delete_one_paper(db, paper):
     paper.pop('created_time', None)
     db.papers.delete_one(paper)
+
+def update_one_task(db, criteria, task):
+    criteria.pop('created_time', None)
+    updated = db.tasks.find_one_and_replace(criteria, task, upsert=True,
+                                            return_document=ReturnDocument.AFTER)
+    return updated
