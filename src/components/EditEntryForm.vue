@@ -17,23 +17,23 @@
                             <b-form-textarea
                                 :value="paper[field] || ''"
                                 v-if="field === 'abstract' || (paper[field] && typeof paper[field] !== 'object' && paper[field].toString().length > 150)"
-                                v-model="paper[field]"
                                 required
                                 rows="6"
                                 max-rows="6"
+                                @change="updatePaperField({paper, field, v: $event.target.value})"
                                 :placeholder="'Enter paper '+field.toString().toLowerCase()"
                             ></b-form-textarea>
                             <b-form-input
                                 :value="paper[field]"
                                 v-else-if="paper[field] && typeof paper[field] !== 'object'"
-                                v-model="paper[field]"
+                                @keyup="updatePaperField({paper, field, v: $event.target.value})"
                                 required
                                 :placeholder="'Enter paper '+field.toString().toLowerCase()"
                             ></b-form-input>
                             <b-form-tags
                                 :value="paper[field] || []"
                                 v-else
-                                v-model="paper[field]"
+                                @change="updatePaperField({paper, field, v: $event.target.value})"
                                 required
                                 :placeholder="'paper '+field.toString().toLowerCase()+'s'"
                             ></b-form-tags>
@@ -43,7 +43,7 @@
             </b-form>
         </b-container>
         <template v-slot:modal-footer>
-            <b-button type="button" class="mr-1" variant="primary" @click="handleSubmit(paper)">Update</b-button>
+            <b-button type="button" class="mr-1" variant="primary" @click="handleSubmit({old: oldPaper, paper})">Update</b-button>
             <b-button type="button" variant="secondary" @click="reset">Cancel</b-button>
         </template>
     </b-modal>
@@ -62,13 +62,18 @@
         },
         data() {
             return {
-                paper: {...this.initialPaper},
+                oldPaper: {...this.initialPaper},
+                paper: this.initialPaper,
             }
         },
         methods: {
             ...mapActions('papers', {
-                handleSubmit: 'updatePaperInfo',
+                updatePaperField: 'updatePaperField',
             }),
+            handleSubmit({old, paper}) {
+                this.$store.dispatch('papers/updatePaperInfo', {old, paper});
+                this.$refs[this.paper.ID].hide();
+            },
             capitalizeFirst(name) {
                 return name.charAt(0).toUpperCase() + name.slice(1)
             },

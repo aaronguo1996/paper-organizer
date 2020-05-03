@@ -1,6 +1,7 @@
 <template>
     <b-modal
         id="modal-upload-bibtex"
+        ref="modal-upload-bibtex"
         title="Upload BibTex File"
         @hidden="resetModal"
         @show="resetModal"
@@ -40,9 +41,12 @@
         },
         methods: {
             ...mapActions('papers', {
-                uploadBibtex: 'uploadByBibTex',
                 resetUploadState: 'resetUploadState'
             }),
+            uploadBibtex() {
+                this.$store.dispatch('papers/uploadByBibTex', this.bibtexFile);
+                this.$refs['modal-upload-bibtex'].hide();
+            },
             resetModal() {
                 this.resetUploadState();
             }

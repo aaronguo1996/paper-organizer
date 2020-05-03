@@ -1,15 +1,20 @@
 import paperOperator from '../../api/paperOperator'
+import Vue from 'vue'
 
 // initial state
 // shape: [{ id, {paper obj}}]
 const state = {
+    // persistent states
     all: [],
+    // temporary states
     uploadState: null,
-    currSelections: [],
+    exportSelections: [],
+    addCandidates: [],
 }
 
 // getters
-const getters = {}
+const getters = {
+}
 
 // actions
 const actions = {
@@ -20,13 +25,18 @@ const actions = {
             })
     },
 
-    addPaperToDatabase () {
+    getPossiblePaper: ({commit}, {paper}) => {
+        return paperOperator.addPaper(paper)
+            .then(papers => {
+                commit('candPapers', JSON.parse(papers));
+            });
     },
 
-    deletePaperFromDatabase () {
-    },
-
-    addPaperToSelection () {
+    deletePaperFromDatabase ({commit}, paper) {
+        paperOperator.deletePaper(paper)
+            .then(() => {
+                commit('removePaper', paper);
+            });
     },
 
     uploadByBibTex({commit}, file) {
@@ -46,8 +56,19 @@ const actions = {
         commit('setUploadError');
     },
 
-    updatePaperInfo({commit}, {pid, paper}) {
-        commit('setPaperInfo', {pid, paper});
+    updatePaperInfo({commit}, {old, paper}) {
+        return paperOperator.updatePaper(old, paper)
+            .then(updatedPaper => {
+                commit('setPaperInfo', {updatedPaper:JSON.parse(updatedPaper)});
+            })
+    },
+
+    updatePaperField({commit}, {paper, field, v}) {
+        commit('setPaperField', {paper, field, v});
+    },
+
+    updatePaperFieldForce({commit}, {paper, field, v}) {
+        commit('setPaperFieldForce', {paper, field, v});
     }
 }
 
@@ -57,14 +78,20 @@ const mutations = {
         state.all = papers
     },
 
-    pushPaperToLiterature () {
+    pushPaper () {
     },
 
     // maybe do not need
     markPaperSelected() {
     },
 
-    removePaperFromLiterature () {
+    candPapers(state, papers) {
+        state.addCandidates = papers;
+    },
+
+    removePaper(state, paper) {
+        const idx = state.all.findIndex(elmt => elmt.ID === paper.ID);
+        state.all.splice(idx, 1);
     },
 
     addFromBibTex(state, db) {
@@ -76,9 +103,18 @@ const mutations = {
         state.uploadState = false;
     },
 
-    setPaperInfo(state, {pid, paper}) {
-        const idx = state.all.findIndex(elmt => elmt.id === pid);
-        state.all[idx] = paper;
+    setPaperInfo(state, {updatedPaper}) {
+        const idx = state.all.findIndex(elmt => elmt.ID === updatedPaper.ID);
+        state.all.splice(idx, 1, updatedPaper);
+    },
+
+    setPaperFieldForce(state, {paper, field, v}) {
+        Vue.delete(paper, field);
+        Vue.set(paper, field, v);
+    },
+
+    setPaperField(state, {paper, field, v}) {
+        Vue.set(paper, field, v);
     },
 }
 

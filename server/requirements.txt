@@ -1,3 +1,5 @@
 bibtexparser
 flask_cors
 pymongo
+beautifulsoup4
+selenium

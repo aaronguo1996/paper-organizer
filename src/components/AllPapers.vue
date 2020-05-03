@@ -2,6 +2,7 @@
     <b-container id="all-papers" class="pr-3">
         <NewEntryForm/>
         <BibTexer/>
+        <AddCandidates/>
         <b-container class="border-bottom mb-3">
             <b-row>
                 <b-col cols="2">
@@ -43,6 +44,7 @@
 import Grid from './Grid.vue'
 import NewEntryForm from './NewEntryForm.vue'
 import BibTexer from './BibTexer.vue'
+import AddCandidates from './AddCandidates'
 
 export default {
     name: 'AllPapers',
@@ -50,6 +52,7 @@ export default {
         Grid,
         NewEntryForm,
         BibTexer,
+        AddCandidates,
     },
     methods: {
         toSearchBar () {

@@ -1,8 +1,10 @@
 import os
 import pymongo
+from pymongo import ReturnDocument
 import bson
 from datetime import datetime
 import config
+import pprint
 
 def create_connection():
     """ create a database connection to a MongoDB database """
@@ -46,3 +48,19 @@ def get_all_papers(db, criteria = {}):
 
 def get_one_paper(db, criteria = {}):
     return bson.decode_all(db.papers.find_one(criteria))
+
+def update_one_paper(db, criteria, paper):
+    criteria.pop('created_time', None)
+    cnt = db.papers.count_documents(criteria)
+    print(cnt)
+    # remove duplicates
+    while cnt > 1:
+        db.papers.find_one_and_delete(criteria)
+        cnt -= 1
+    updated = db.papers.find_one_and_replace(criteria, paper, upsert=True,
+                                             return_document=ReturnDocument.AFTER)
+    return updated
+
+def delete_one_paper(db, paper):
+    paper.pop('created_time', None)
+    db.papers.delete_one(paper)

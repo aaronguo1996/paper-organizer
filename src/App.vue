@@ -44,20 +44,24 @@ html, body {
   overflow: scroll;
 }
 
-ul.nav li a:hover {
+.nav-sidebar a:hover {
     color: #fff !important;
     transition: color 0.3s;
 }
 
-ul.nav li:hover {
+.nav-sidebar:hover {
     background-color: #005082 !important;
     transition: background-color 0.3s;
 }
 
 .tag {
-    height: 5px;
-    width: 50px !important;
-    margin-right: 5px;
+    height: 100%;
+    width: 5px !important;
+}
+
+.tag-col {
+    flex-grow: 0 !important;
+    padding-right: 0 !important;
 }
 
 .tag-unread {
@@ -76,7 +80,7 @@ ul.nav li:hover {
     background-color: #ffbd69;
 }
 
-a {
+a.nav-bar-link {
     color: #ffa41b !important;
 }
 
@@ -98,11 +102,90 @@ a {
     color: #fff !important;
 }
 
-.page-link {
+.page-link, .btn-link {
     color: #005082 !important;
 }
 
 .sidebar {
     background-color: #000839 !important;
+}
+
+.bg-mine {
+    background-color: #000839 !important;
+}
+
+.arrow {
+    position: relative;
+    height: 4.5rem;
+    width: 240px;
+    color: #fff;
+}
+
+.no-glow {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.arrow-right:after {
+    content: '';
+    position:absolute;
+    flex-grow: 0;
+    width: 0;
+    height: 0;
+    border-top: 2.25rem solid transparent;
+    border-bottom: 2.25rem solid transparent;
+    border-left: 30px solid #000839;
+    left: 100%;
+    z-index: 100;
+}
+
+.arrow-left:before {
+    content: '';
+    position:absolute;
+    flex-grow: 0;
+    width: 0;
+    height: 0;
+    border-top: 2.25rem solid transparent;
+    border-bottom: 2.25rem solid transparent;
+    border-left: 30px solid #fff;
+    left: 0;
+    z-index: 99;
+}
+
+.mr-half {
+    margin-right: .1rem !important;
+}
+
+.small {
+    display: block;
+    line-height: 1.25rem;
+}
+
+a:focus, a:active {
+    outline: none !important;
+}
+
+,nav-arrow-active .bg-mine {
+    background-color: #000839 !important;
+}
+
+.nav-arrow-inactive .bg-mine {
+    background-color: #ddd !important;
+}
+
+.nav-arrow-inactive:after {
+    border-left-color: #ddd !important;
+}
+
+.nav-arrow-success .bg-mine {
+    background-color: #06623b !important;
+}
+
+.nav-arrow-success:after {
+    border-left-color: #06623b !important;
+}
+
+.my-success {
+    color: #06623b !important;
 }
 </style>

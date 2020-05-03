@@ -2,7 +2,7 @@ import {baseRoute} from './utilities'
 
 /* mocking client server  */
 const getPapers = () => {
-    const ROUTE = baseRoute + "all";
+    const ROUTE = baseRoute + "paper/all";
 
     const fetchOpts = {
         method: 'GET', // or 'PUT'
@@ -12,12 +12,63 @@ const getPapers = () => {
         .then(response => response.text());
 }
 
-const addPaper = (cb, paper) => {
-    setTimeout(() => cb(paper), 10)
+const addPaper = (paper) => {
+    const ROUTE = baseRoute + "paper/add";
+
+    const fetchOpts = {
+        method: 'POST',
+        body: JSON.stringify(paper)
+    }
+
+    return fetch(ROUTE, fetchOpts)
+        .then(response => response.text());
 }
 
-const deletePaper = (cb, paper) => {
-    setTimeout(() => cb(paper), 10)
+const addPapers = (papers) => {
+    const ROUTE = baseRoute + "paper/adds";
+
+    const fetchOpts = {
+        method: 'POST',
+        body: JSON.stringify(papers)
+    }
+
+    return fetch(ROUTE, fetchOpts)
+        .then(response => JSON.parse(response.text()));
+}
+
+const updatePaper = (old, paper) => {
+    const ROUTE = baseRoute + "paper/update";
+
+    const data = {
+        old: old,
+        new: paper
+    }
+
+    const fetchOpts = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+    };
+
+    return fetch(ROUTE, fetchOpts)
+        .then(response => response.text());
+}
+
+const deletePaper = (paper) => {
+    const ROUTE = baseRoute + "paper/delete";
+
+    const data = {
+        paper
+    }
+
+    const fetchOpts = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+    };
+
+    return fetch(ROUTE, fetchOpts)
+        .then(response => response.text());
 }
 
 const uploadBibTex = (file) => {
@@ -35,6 +86,8 @@ const uploadBibTex = (file) => {
 export default {
     getPapers,
     addPaper,
+    addPapers,
     deletePaper,
+    updatePaper,
     uploadBibTex,
 }

@@ -1,24 +1,24 @@
 <template>
     <div>
         <b-list-group-item
-            class="px-0 py-3 my-2 rounded-0">
+            class="px-0 py-0 my-2 rounded-0">
             <b-row>
-                <b-col>
-                    <b-row class="mx-0 px-3">
-                        <div :class="'tag tag-'+paper.status"
-                        v-if="paper.status"></div>
-                        <div class="tag tag-unread"
-                        v-else></div>
-                    </b-row>
+                <b-col class="tag-col">
+                    <div :class="'tag tag-'+paper.status.split(' ').join('-')"
+                    v-if="paper.status"></div>
+                    <div class="tag tag-unread"
+                    v-else></div>
+                </b-col>
+                <b-col class="pl-0 py-3">
                     <b-row class="mx-0 pt-2 px-3">
                         <h5> {{paper.title}}</h5>
                     </b-row>
-                    <b-row class="mx-0 px-3">
+                    <b-row class="mx-0 mb-2 px-3">
                         {{paper.author.join("; ")}}
                     </b-row>
-                    <b-row
-                        class="mx-0 pt-2 mb-3">
-                        <b-col class="text-nowrap text-truncate">
+                    <b-row v-if="paper.keyword"
+                        class="mx-0">
+                        <b-col>
                         <b-button
                             v-for="t in paper.keyword"
                             :key="t"
@@ -29,8 +29,62 @@
                         </b-col>
                     </b-row>
                 </b-col>
+                <b-col style="flex-grow: 0 !important" class="pr-4 pt-3">
+                    <b-dropdown size="sm" toggle-class="text-decoration-none" variant="link" no-caret>
+                        <template v-slot:button-content>
+                            <b-icon-three-dots-vertical/>
+                        </template>
+                        <b-dropdown-item>Set status as</b-dropdown-item>
+                        <b-dropdown-item-button
+                            @click="setPaperStatus('unread')">
+                            <b-icon-check class="mr-2"
+                            v-if="!paper.status || paper.status==='unread'"/>
+                            <b-icon-blank class="mr-2"
+                            v-else/>
+                            Unread
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button
+                            @click="setPaperStatus('to read')">
+                            <b-icon-check class="mr-2"
+                            v-if="paper.status==='to read'"/>
+                            <b-icon-blank class="mr-2"
+                            v-else/>
+                            To Read
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button
+                            @click="setPaperStatus('in read')">
+                            <b-icon-check class="mr-2"
+                            v-if="paper.status==='in read'"/>
+                            <b-icon-blank class="mr-2"
+                            v-else/>
+                            In Read
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button
+                            @click="setPaperStatus('read')">
+                            <b-icon-check class="mr-2"
+                            v-if="paper.status==='read'"/>
+                            <b-icon-blank class="mr-2"
+                            v-else/>
+                            Read
+                        </b-dropdown-item-button>
+                        <b-dropdown-divider></b-dropdown-divider>
+                        <b-dropdown-item-button
+                            size="sm"
+                            class="mr-2"
+                            @click="toggleCollapse(paper.ID)">
+                            <b-icon-pencil class="mr-2"/>
+                            Edit
+                            </b-dropdown-item-button>
+                        <b-dropdown-item-button
+                            size="sm"
+                            @click="deletePaper(paper)"
+                            ><b-icon-trash class="mr-2"/>
+                            Delete
+                            </b-dropdown-item-button>
+                    </b-dropdown>
+                </b-col>
             </b-row>
-            <b-row class="mx-0">
+            <!-- b-row class="mx-0">
                 <b-col
                     v-if="paper.abstract && paper.abstract.length > 0"
                     style="overflow: hidden; text-overflow: ellipsis;
@@ -41,59 +95,7 @@
                 <b-col v-else>
                     <span>(No Abstract Available)</span>
                 </b-col>
-            </b-row>
-            <b-row align-h="end" class="mt-3">
-                <b-col cols="5">
-                    <b-dropdown
-                        variant="primary"
-                        size="sm"
-                        class="mr-2">
-                        <template v-slot:button-content>
-                            <b-icon-controller class="mr-2"/>Set Status as
-                        </template>
-                        {{paper.status}}
-                        <b-dropdown-item-button>
-                            <b-icon-check class="mr-2"
-                            v-if="paper.status==='unread'"/>
-                            <b-icon-blank class="mr-2"
-                            v-else/>
-                            Unread
-                        </b-dropdown-item-button>
-                        <b-dropdown-item-button>
-                            <b-icon-check class="mr-2"
-                            v-if="paper.status==='to read'"/>
-                            <b-icon-blank class="mr-2"
-                            v-else/>
-                            To Read
-                        </b-dropdown-item-button>
-                        <b-dropdown-item-button>
-                            <b-icon-check class="mr-2"
-                            v-if="paper.status==='in read'"/>
-                            <b-icon-blank class="mr-2"
-                            v-else/>
-                            In Read
-                        </b-dropdown-item-button>
-                        <b-dropdown-item-button>
-                            <b-icon-check class="mr-2"
-                            v-if="paper.status==='read'"/>
-                            <b-icon-blank class="mr-2"
-                            v-else/>
-                            Read
-                        </b-dropdown-item-button>
-                    </b-dropdown>
-                    <b-button
-                        variant="primary"
-                        size="sm"
-                        class="mr-2"
-                        style="width:80px"
-                        @click="toggleCollapse(paper.ID)">
-                        <b-icon-pencil class="mr-2"/>Edit</b-button>
-                    <b-button
-                        variant="primary"
-                        size="sm"
-                        ><b-icon-trash class="mr-2"/>Delete</b-button>
-                </b-col>
-            </b-row>
+            </b-row -->
         </b-list-group-item>
         <EditEntryForm :initial-paper="paper"/>
     </div>
@@ -101,6 +103,7 @@
 
 <script>
     import EditEntryForm from './EditEntryForm'
+    import {mapActions} from 'vuex'
 
     export default {
         props: {
@@ -121,6 +124,22 @@
             toggleCollapse(modalId) {
                 this.$root.$emit('bv::show::modal', modalId)
             },
+            ...mapActions('papers', {
+                deletePaper: 'deletePaperFromDatabase'
+            }),
+            setPaperStatus(status) {
+                if(!this.paper.status || this.paper.status !== status) {
+                    this.$store.dispatch('papers/updatePaperInfo', {
+                        old: this.paper,
+                        paper: {...this.paper, status}
+                    })
+                    this.$store.dispatch('papers/updatePaperField', {
+                        paper: this.paper,
+                        field: 'status',
+                        v: status
+                    });
+                }
+            }
         },
     }
 </script>
