@@ -1,9 +1,7 @@
 <template>
     <div id="app" class="mx-0 px-0">
-        <b-row no-gutters>
-            <b-col cols="2"><SideBar class="sidebar"/></b-col>
-            <b-col class="full-screen px-3 mb-5"><AllPapers/></b-col>
-        </b-row>
+        <SideBar/>
+        <AllPapers/>
     </div>
 </template>
 
@@ -30,17 +28,12 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  position: relative;
   color: #2c3e50;
   font-size: 11pt;
 }
 
-#all-papers {
-  padding-top:50px;
-  height: 100vh;
-}
-
 .full-screen {
-  height: 100vh;
   overflow: scroll;
 }
 
@@ -80,30 +73,26 @@ html, body {
     background-color: #ffbd69;
 }
 
-a.nav-bar-link {
-    color: #ffa41b !important;
-}
-
 .btn-outline-primary {
-    border-color: #005082 !important;
-    color: #005082 !important;
+    border-color: #000839 !important;
+    color: #000839 !important;
 }
 
 .btn-outline-primary:hover {
-    background-color: #005082 !important;
+    background-color: #000839 !important;
     color: #fff !important;
     transition: all 0.3s;
 }
 
 .btn-primary, .dropdown-item.active, .dropdown-item:active,
 .page-item.active .page-link {
-    border-color: #005082 !important;
-    background-color: #005082 !important;
+    border-color: #000839 !important;
+    background-color: #000839 !important;
     color: #fff !important;
 }
 
 .page-link, .btn-link {
-    color: #005082 !important;
+    color: #000839 !important;
 }
 
 .sidebar {

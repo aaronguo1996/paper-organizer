@@ -20,7 +20,7 @@
                                 required
                                 rows="6"
                                 max-rows="6"
-                                @change="updatePaperField({paper, field, v: $event.target.value})"
+                                @keyup="updatePaperField({paper, field, v: $event.target.value})"
                                 :placeholder="'Enter paper '+field.toString().toLowerCase()"
                             ></b-form-textarea>
                             <b-form-input
@@ -33,7 +33,7 @@
                             <b-form-tags
                                 :value="paper[field] || []"
                                 v-else
-                                @change="updatePaperField({paper, field, v: $event.target.value})"
+                                @input="(v) => updatePaperField({paper, field, v})"
                                 required
                                 :placeholder="'paper '+field.toString().toLowerCase()+'s'"
                             ></b-form-tags>
@@ -71,6 +71,7 @@
                 updatePaperField: 'updatePaperField',
             }),
             handleSubmit({old, paper}) {
+                console.log(old, paper)
                 this.$store.dispatch('papers/updatePaperInfo', {old, paper});
                 this.$refs[this.paper.ID].hide();
             },

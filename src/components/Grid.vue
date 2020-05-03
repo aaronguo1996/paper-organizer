@@ -1,5 +1,5 @@
 <template>
-    <b-container class="px-0">
+    <b-container class="px-5">
         <b-container v-if="rows>1">
             <b-pagination
             v-model="currentPage"

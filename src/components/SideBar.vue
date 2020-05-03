@@ -1,11 +1,15 @@
 <template>
-    <b-nav
-        vertical 
-        class="h-100 text-left px-2 pt-5 order-2"
+    <b-navbar
+        sticky
+        type="light"
+        variant="light"
         >
-        <b-nav-item link-classes="nav-bar-link" class="nav-sidebar">All Papers</b-nav-item>
-        <b-nav-item link-classes="nav-bar-link" class="nav-sidebar">Read Progress</b-nav-item>
-        <b-nav-item link-classes="nav-bar-link" class="nav-sidebar">Tags</b-nav-item>
-        <b-nav-item link-classes="nav-bar-link" class="nav-sidebar">Export</b-nav-item>
-    </b-nav>
+        <b-navbar-brand href="#">Paper Organizer</b-navbar-brand>
+        <b-navbar-nav class="ml-auto" align="end">
+            <b-nav-item link-classes="nav-bar-link">All Papers</b-nav-item>
+            <b-nav-item link-classes="nav-bar-link">Read Progress</b-nav-item>
+            <b-nav-item link-classes="nav-bar-link">Tags</b-nav-item>
+            <b-nav-item link-classes="nav-bar-link">Export</b-nav-item>
+        </b-navbar-nav>
+    </b-navbar>
 </template>

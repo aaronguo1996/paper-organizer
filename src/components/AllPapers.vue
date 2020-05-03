@@ -1,8 +1,7 @@
 <template>
-    <b-container id="all-papers" class="pr-3">
+    <b-container id="all-papers" class="pr-3 mt-5">
         <NewEntryForm/>
         <BibTexer/>
-        <AddCandidates/>
         <b-container class="border-bottom mb-3">
             <b-row>
                 <b-col cols="2">
@@ -18,7 +17,7 @@
                             <b-icon-upload class="mr-1"/>
                             Upload BibTex
                         </b-button>
-                        <b-button ref="searchBtn" variant="outline-primary" size="sm" @click="toSearchBar">
+                        <!-- b-button ref="searchBtn" variant="outline-primary" size="sm" @click="toSearchBar">
                             <b-icon-search class="mr-1"/>
                             Search
                         </b-button>
@@ -31,7 +30,7 @@
                                     v-on:focusout="toSearchBtn"
                                     ></b-form-input>
                             </div>
-                        </b-col>
+                        </b-col-->
                     </b-form-row>
                 </b-col>
             </b-row>
@@ -44,7 +43,6 @@
 import Grid from './Grid.vue'
 import NewEntryForm from './NewEntryForm.vue'
 import BibTexer from './BibTexer.vue'
-import AddCandidates from './AddCandidates'
 
 export default {
     name: 'AllPapers',
@@ -52,7 +50,6 @@ export default {
         Grid,
         NewEntryForm,
         BibTexer,
-        AddCandidates,
     },
     methods: {
         toSearchBar () {
