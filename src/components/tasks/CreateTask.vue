@@ -47,14 +47,34 @@
             <b-form-group
                 label="Subtasks">
                 <b-form-checkbox-group
-                    v-model="checked"
                     stacked>
-                    <b-form-checkbox
-                        v-for="subtask in task.subtasks"
-                        :value="subtask.item"
-                        :key="subtask.item">
-                        {{subtask.item}}
-                    </b-form-checkbox>
+                    <b-container
+                        v-for="(subtask, i) in task.subtasks"
+                        :key="i">
+                        <b-row>
+                            <b-col>
+                                <b-form-checkbox disabled
+                                    class="my-2">
+                                    <b-form-input
+                                        :disabled="i !== editableId"
+                                        autofocus
+                                        ref="checkbox-inputs"
+                                        v-model="subtask.item" 
+                                        @keyup.enter="(e) => disableInput(e)"
+                                        @blur="(e) => disableInput(e)"
+                                        @keyup="(e) => changeInput(subtask, e)"
+                                        class="border-0 py-0"
+                                        style="height: 1.5rem !important; border-bottom: 1px dashed #ddd !important; background-color: transparent !important;"></b-form-input>
+                                </b-form-checkbox>
+                            </b-col>
+                            <b-col style="flex-grow: 0">
+                                <b-link @click="editSubtask(subtask, i)" class="text-secondary"><b-icon-pencil/></b-link>
+                            </b-col>
+                            <b-col style="flex-grow: 0">
+                                <b-link @click="deleteSubtask(subtask)" class="text-secondary"><b-icon-trash/></b-link>
+                            </b-col>
+                        </b-row>
+                    </b-container>
                 </b-form-checkbox-group>
                 <b-form-input
                     placeholder="Add a new subtask and press Enter"
@@ -80,7 +100,7 @@
             return {
                 paper: this.initialPaper,
                 lastValue: null,
-                checked: [],
+                editableId: null,
                 task: {
                     start_time: new Date(),
                     end_time: null,
@@ -96,6 +116,24 @@
                     status: false
                 });
                 this.lastValue = null;
+            },
+            deleteSubtask(v) {
+                this.task.subtasks = this.task.subtasks.filter(elmt => elmt !== v);
+            },
+            changeInput(subtask, evt) {
+                this.$set(subtask, 'item', evt.target.value);
+                console.log(this.task.subtasks)
+            },
+            editSubtask(subtask, i) {
+                this.editableId = i;
+                this.$nextTick(() => {
+                    this.$nextTick(() => {
+                        this.$refs['checkbox-inputs'][i].focus()
+                    })
+                });
+            },
+            disableInput() {
+                this.editableId = null;
             },
             handleSubmit() {
                 console.log(this.checked);
