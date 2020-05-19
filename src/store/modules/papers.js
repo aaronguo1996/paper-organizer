@@ -87,7 +87,7 @@ const actions = {
         // merge filters
         const criteria = filters.reduce((acc, elmt) => {
             const cr = elmt.criteria;
-            return {'$and': [cr, acc]};`
+            return {'$and': [cr, acc]};
         }, {})
         return paperOperator.filterPapers({criteria: criteria})
             .then(newPaperList => {
