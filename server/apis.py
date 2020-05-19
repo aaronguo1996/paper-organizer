@@ -34,7 +34,9 @@ def delete_db_paper(paper):
     db = create_connection()
     return delete_one_paper(db, paper)
 
-def search_google_research(paper):
-    search_query = scholarly.search_pubs_query(paper['title'])
-    q = next(search_query).fill()
-    print(q.bib)
+def search_paper(criteria):
+    db = create_connection()
+    papers = get_all_papers(db, criteria=criteria)
+    for p in papers:
+        p.pop('_id', None)
+    return papers

@@ -189,6 +189,9 @@
             },
             resetModal() {
                 this.nameState = null
+                this.completedSteps = []
+                this.activeTab = 0
+                this.checked = []
                 this.$bvModal.hide('modal-new-entry')
             },
             handleOk(bvModalEvt) {

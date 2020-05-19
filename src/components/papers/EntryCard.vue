@@ -16,15 +16,19 @@
                     <b-row class="mx-0 mb-2 px-3">
                         {{paper.author.join("; ")}}
                     </b-row>
-                    <b-row v-if="paper.keyword"
+                    <b-row v-if="paper.keyword || paper.tags"
                         class="mx-0">
                         <b-col>
                         <b-button
-                            v-for="t in paper.keyword"
+                            v-for="t in ([].concat(paper.keyword, paper.tags))"
                             :key="t"
                             variant="outline-primary"
                             class="mr-1 badge font-weight-bold"
                             size="sm"
+                            @click="filterPaper({
+                                criteria: {'$or': [{tags:{'$all': [t]}},{keyword:{'$all': [t]}}]},
+                                display: 'tags: ' + t
+                                })"
                             >{{t}}</b-button>
                         </b-col>
                     </b-row>
@@ -137,7 +141,8 @@
                 this.$root.$emit('bv::show::modal', 'modal-new-task-' + this.paper.ID);
             },
             ...mapActions('papers', {
-                deletePaper: 'deletePaperFromDatabase'
+                deletePaper: 'deletePaperFromDatabase',
+                filterPaper: 'filterPaperBy',
             }),
             setPaperStatus(status) {
                 if(!this.paper.status || this.paper.status !== status) {

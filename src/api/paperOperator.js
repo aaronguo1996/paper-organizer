@@ -83,6 +83,20 @@ const uploadBibTex = (file) => {
         .then(response => response.text());
 }
 
+const filterPapers = (criteria) => {
+    const ROUTE = baseRoute + "paper/filter";
+
+    const fetchOpts = {
+        method: 'POST',
+        body: JSON.stringify(criteria)
+    }
+
+    console.log(fetchOpts)
+
+    return fetch(ROUTE, fetchOpts)
+        .then(response => response.text());
+}
+
 export default {
     getPapers,
     addPaper,
@@ -90,4 +104,5 @@ export default {
     deletePaper,
     updatePaper,
     uploadBibTex,
+    filterPapers,
 }

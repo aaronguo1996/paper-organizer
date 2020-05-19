@@ -40,6 +40,7 @@ def insert_many_papers(conn, papers):
     return paper_collection.insert_many(papers).inserted_ids
 
 def get_all_papers(db, criteria = {}):
+    print(criteria)
     cursor = db.papers.find_raw_batches(criteria)
     result = []
     for p in cursor:
@@ -59,7 +60,7 @@ def update_one_paper(db, criteria, paper):
         cnt -= 1
     updated = db.papers.find_one_and_replace(criteria, paper, upsert=True,
                                              return_document=ReturnDocument.AFTER)
-    return updated
+    return updated 
 
 def delete_one_paper(db, paper):
     paper.pop('created_time', None)

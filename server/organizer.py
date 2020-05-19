@@ -1,5 +1,5 @@
 from flask import Flask, request, json
-from apis import read_bibtex, get_db_papers, update_db_paper, delete_db_paper
+from apis import read_bibtex, get_db_papers, update_db_paper, delete_db_paper, search_paper
 from scholar import search_by_title
 from flask_cors import CORS
 
@@ -42,3 +42,10 @@ def get_paper_cands():
     obj = json.loads(request.data)
     candidates = search_by_title(obj)
     return json.jsonify(candidates)
+
+@app.route('/paper/filter', methods=['GET','POST'])
+def filter_paper():
+    # print(request.data)
+    obj = json.loads(request.data)
+    filtered = search_paper(obj['criteria'])
+    return json.jsonify(filtered)

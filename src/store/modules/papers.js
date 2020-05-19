@@ -7,6 +7,7 @@ const state = {
     // persistent states
     all: [],
     // temporary states
+    filters: [],
     uploadState: null,
     exportSelections: [],
     addCandidates: [],
@@ -21,7 +22,8 @@ const actions = {
     getAllPapers ({ commit }) {
         paperOperator.getPapers()
             .then(papers => {
-                commit('setPapers', JSON.parse(papers));
+                const all = JSON.parse(papers);
+                commit('setPapers', all);
             })
     },
 
@@ -69,6 +71,29 @@ const actions = {
 
     updatePaperFieldForce({commit}, {paper, field, v}) {
         commit('setPaperFieldForce', {paper, field, v});
+    },
+
+    filterPaperBy({commit}, {criteria, display}) {
+        return paperOperator.filterPapers({criteria})
+            .then(newPaperList => {
+                commit('addFilter', {criteria, display});
+                commit('setPapers', JSON.parse(newPaperList));
+            })
+    },
+
+    removeFilter({commit, state}, filter) {
+        const filters = state.filters.filter(elmt => elmt !== filter)
+        console.log(filters);
+        // merge filters
+        const criteria = filters.reduce((acc, elmt) => {
+            const cr = elmt.criteria;
+            return {'$and': [cr, acc]};`
+        }, {})
+        return paperOperator.filterPapers({criteria: criteria})
+            .then(newPaperList => {
+                commit('setFilter', filters);
+                commit('setPapers', JSON.parse(newPaperList));
+            })
     }
 }
 
@@ -108,13 +133,25 @@ const mutations = {
         state.all.splice(idx, 1, updatedPaper);
     },
 
-    setPaperFieldForce(state, {paper, field, v}) {
+    setPaperFieldForce({paper, field, v}) {
         Vue.delete(paper, field);
         Vue.set(paper, field, v);
     },
 
-    setPaperField(state, {paper, field, v}) {
+    setPaperField({paper, field, v}) {
         Vue.set(paper, field, v);
+    },
+
+    addFilter(state, {criteria, display}) {
+        state.filters = state.filters.concat({criteria, display});
+    },
+
+    removeFilter(state, filter) {
+        state.filters = state.filters.filter(elmt => elmt !== filter);
+    },
+
+    setFilter(state, filters) {
+        state.filters = filters;
     },
 }
 

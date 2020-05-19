@@ -85,8 +85,8 @@
         computed: {
             sortedFields() {
                 const keys = Object.keys(this.paper);
-                const reservedKeys = ["title", "author", "abstract", "keyword"];
-                const skippedKeys = ["ID", "created_time", "modified_time"];
+                const reservedKeys = ["title", "author", "abstract", "keyword", "tags"];
+                const skippedKeys = ["ID", "created_time", "modified_time", "timestamp"];
                 var reducedKeys = keys.filter(item => reservedKeys.indexOf(item) < 0 && skippedKeys.indexOf(item) < 0);
                 // sort fields by their value length
                 reducedKeys.sort((a, b) => this.paper[a].toString().length - this.paper[b].toString().length);

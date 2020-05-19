@@ -1,14 +1,33 @@
 <template>
     <b-container class="px-5">
-        <b-container v-if="rows>1">
-            <b-pagination
-            v-model="currentPage"
-            :total-rows="rows"
-            :per-page="perPage"
-            limit="3"
-            align="right"
-            aria-controls="my-table"
-            ></b-pagination>
+        <b-container>
+            <b-row align-h="start" align-v="end">
+                <b-col sm class="text-left pb-2">
+                    <b-button 
+                        href="#" 
+                        variant="outline-secondary"
+                        class="badge mr-1"
+                        v-for="(f,i) in filters"
+                        :key="i">
+                        {{f.display}}
+                        <b-icon-x-circle
+                            @click="refilter(f)"
+                            ></b-icon-x-circle>
+                        </b-button>
+                </b-col>
+                <b-col  v-if="rows>perPage">
+                    <b-container>
+                        <b-pagination
+                        v-model="currentPage"
+                        :total-rows="rows"
+                        :per-page="perPage"
+                        limit="3"
+                        align="right"
+                        aria-controls="my-table"
+                        ></b-pagination>
+                        </b-container>
+                </b-col>
+            </b-row>
         </b-container>
         <b-container class="text-left" v-if="items.length">
             <b-list-group
@@ -29,7 +48,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
     import EntryCard from './EntryCard'
 
     export default {
@@ -45,12 +64,19 @@
             }
         },
 
+        methods: {
+            ...mapActions('papers', {
+                refilter: 'removeFilter'
+            })
+        },
+
         computed: {
             rows() {
                 return this.items.length
             },
             ...mapState({
-                items: state => state.papers.all
+                items: state => state.papers.all,
+                filters: state => state.papers.filters
             }),
             currentPageItems() {
                 let lengthAll = this.items.length;
