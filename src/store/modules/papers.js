@@ -6,6 +6,7 @@ import Vue from 'vue'
 const state = {
     // persistent states
     all: [],
+    currentPage: 1,
     // temporary states
     filters: [],
     uploadState: null,
@@ -73,9 +74,16 @@ const actions = {
         commit('setPaperFieldForce', {paper, field, v});
     },
 
+    setPage({commit}, p) {
+        commit('setPage', p);
+    },
+
     filterPaperBy({commit}, {criteria, display}) {
-        return paperOperator.filterPapers({criteria})
+        const filters = state.filters.map(elmt => elmt.criteria)
+        const newCriteria = {'$and':filters.concat(criteria)}
+        return paperOperator.filterPapers({criteria:newCriteria})
             .then(newPaperList => {
+                commit('setPage', 1);
                 commit('addFilter', {criteria, display});
                 commit('setPapers', JSON.parse(newPaperList));
             })
@@ -91,6 +99,7 @@ const actions = {
         }, {})
         return paperOperator.filterPapers({criteria: criteria})
             .then(newPaperList => {
+                commit('setPage', 1);
                 commit('setFilter', filters);
                 commit('setPapers', JSON.parse(newPaperList));
             })
@@ -99,6 +108,10 @@ const actions = {
 
 // mutations
 const mutations = {
+    setPage(state, p) {
+        state.currentPage = p;
+    },
+
     setPapers (state, papers) {
         state.all = papers
     },

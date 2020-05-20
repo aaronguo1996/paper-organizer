@@ -91,8 +91,6 @@ const filterPapers = (criteria) => {
         body: JSON.stringify(criteria)
     }
 
-    console.log(fetchOpts)
-
     return fetch(ROUTE, fetchOpts)
         .then(response => response.text());
 }

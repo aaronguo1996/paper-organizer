@@ -14,7 +14,17 @@
                         <h5> {{paper.title}}</h5>
                     </b-row>
                     <b-row class="mx-0 mb-2 px-3">
-                        {{paper.author.join("; ")}}
+                        <b-link
+                            v-for="(a, i) in paper.author"
+                            :key="a+i"
+                            @click="filterPaper({
+                                criteria: {author:{'$all': [a]}},
+                                display: 'author: ' + a
+                                })"
+                            class="text-secondary"
+                            >
+                            {{a}}<span v-if="i !== paper.author.length - 1">;</span>
+                        </b-link>
                     </b-row>
                     <b-row v-if="paper.keyword || paper.tags"
                         class="mx-0">

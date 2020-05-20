@@ -1,24 +1,27 @@
 <template>
+
     <b-container class="px-5">
         <b-container>
             <b-row align-h="start" align-v="end">
                 <b-col sm class="text-left pb-2">
-                    <b-button 
+                    <b-button
+                        pill
                         href="#" 
                         variant="outline-secondary"
-                        class="badge mr-1"
+                        class="badge mr-1 pl-2"
                         v-for="(f,i) in filters"
                         :key="i">
                         {{f.display}}
-                        <b-icon-x-circle
+                        <b-icon-x
                             @click="refilter(f)"
-                            ></b-icon-x-circle>
+                            ></b-icon-x>
                         </b-button>
                 </b-col>
                 <b-col  v-if="rows>perPage">
                     <b-container>
                         <b-pagination
-                        v-model="currentPage"
+                        @change="(p) => setPage(p)"
+                        :value="currentPage"
                         :total-rows="rows"
                         :per-page="perPage"
                         limit="3"
@@ -59,15 +62,18 @@
         data() {
             return {
                 perPage: 20,
-                currentPage: 1,
+                // currentPage: 1,
                 selectedKeys: ["title", "author", "keyword"]
             }
         },
 
         methods: {
-            ...mapActions('papers', {
-                refilter: 'removeFilter'
-            })
+            refilter(f) {
+                this.$store.dispatch('papers/removeFilter', f);
+            },
+            ...mapActions('papers',{
+                setPage: 'setPage',
+            }),
         },
 
         computed: {
@@ -76,10 +82,11 @@
             },
             ...mapState({
                 items: state => state.papers.all,
-                filters: state => state.papers.filters
+                filters: state => state.papers.filters,
+                currentPage: state => state.papers.currentPage
             }),
             currentPageItems() {
-                let lengthAll = this.items.length;
+                const lengthAll = this.items.length;
                 var nbPages = 0;
                 var paginated_items = [];
                 for (let i = 0; i < lengthAll; i = i + this.perPage) {
