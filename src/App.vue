@@ -1,20 +1,29 @@
 <template>
     <div id="app" class="mx-0 px-0">
         <SideBar/>
-        <AllPapers/>
+        <AllPapers v-if="display==='allPapers'"/>
+        <ExportList v-if="display==='export'"/>
     </div>
 </template>
 
 <script>
 import SideBar from './components/SideBar.vue'
 import AllPapers from './components/papers/AllPapers.vue'
+import ExportList from './components/papers/ExportList.vue'
+import {mapState} from 'vuex'
 
 export default {
-  name: 'App',
-  components: {
-    AllPapers,
-    SideBar
-  }
+    name: 'App',
+    components: {
+        AllPapers,
+        SideBar,
+        ExportList,
+    },
+    computed: {
+        ...mapState({
+            display: state => state.displayStack
+        })
+    }
 }
 </script>
 
@@ -154,7 +163,7 @@ a:focus, a:active {
     outline: none !important;
 }
 
-,nav-arrow-active .bg-mine {
+.nav-arrow-active .bg-mine {
     background-color: #000839 !important;
 }
 

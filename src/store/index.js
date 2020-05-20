@@ -9,10 +9,23 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
-  modules: {
-      papers,
-      tasks,
-  },
-  plugins: [createLogger()],
-  strict: debug,
+    modules: {
+        papers,
+        tasks,
+    },
+    plugins: [createLogger()],
+    strict: debug,
+    state: {
+        displayStack: 'allPapers'
+    },
+    actions: {
+        changeDisplay({commit}, name) {
+            commit('setDisplay', name);
+        }
+    },
+    mutations: {
+        setDisplay(state, name) {
+            state.displayStack = name;
+        }
+    }
 })
