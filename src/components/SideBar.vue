@@ -16,7 +16,7 @@
                     <template v-slot:append>
                         <b-button
                             size="sm"
-                            @click="handleSubmit"
+                            @click="handleSubmit()"
                             ><b-icon-search size="sm"></b-icon-search></b-button>
                     </template>
                 </b-input-group>
@@ -48,6 +48,7 @@
                 setDisplay: 'changeDisplay',
             }),
             handleSubmit() {
+                this.setDisplay('allPapers');
                 this.filterPaper({
                     criteria: {'$or':[
                         {'title': {'$regex': '.*'+this.searchKey+'.*', '$options': 'i',}},

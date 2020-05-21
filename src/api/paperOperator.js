@@ -86,7 +86,7 @@ const uploadBibTex = (file) => {
 const exportBibTex = (entries) => {
     const ROUTE = baseRoute + "bibtex/export";
 
-    console.log(entries)
+    // console.log(entries)
     const fetchOpts = {
         method: 'POST', // or 'PUT'
         body: JSON.stringify(entries),

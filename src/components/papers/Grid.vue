@@ -104,8 +104,10 @@
         },
 
 
-        created () {
-            this.$store.dispatch('papers/getAllPapers')
+        mounted () {
+            if(!this.items || this.items.length === 0) {
+                this.$store.dispatch('papers/getAllPapers')
+            }
         },
     }
 </script>

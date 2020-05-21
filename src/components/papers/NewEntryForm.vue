@@ -55,12 +55,13 @@
                                 placeholder="author1, author2, author3, ..."
                             ></b-form-tags>
                         </b-form-group>
-                        <b-row align-h="end" class="pt-3 pr-3">
-                            <b-button v-if="!loadingState" type="submit" variant="primary">Next Step</b-button>
-                            <b-button v-if="loadingState" variant="primary" disabled>
+                        <b-row :align-h="loadingState === -1 ? 'between' : 'end'" class="pt-3 px-3">
+                            <b-col v-if="loadingState === -1" class="text-danger">No entry found for your input</b-col>
+                            <b-button v-else-if="loadingState === 1" variant="primary" disabled>
                                 <b-spinner small></b-spinner>
                                 Loading...
                             </b-button>
+                            <b-button v-if="loadingState !== 1" type="submit" variant="primary">Next Step</b-button>
                         </b-row>
                     </form>
                 </b-container>
@@ -100,11 +101,11 @@
                             </b-form-checkbox-group>
                         </b-form-group>
                         <b-row align-h="end" class="pt-3 pr-3">
-                            <b-button v-if="!loadingState" type="submit" variant="primary">Next Step</b-button>
-                            <b-button v-if="loadingState" variant="primary" disabled>
+                            <b-button v-if="loadingState === 1" variant="primary" disabled>
                                 <b-spinner small></b-spinner>
                                 Loading...
                             </b-button>
+                            <b-button v-else type="submit" variant="primary">Next Step</b-button>
                         </b-row>
                     </b-form>
                 </b-container>
@@ -172,7 +173,7 @@
                 completedSteps: [],
                 activeTab: 0,
                 checked: [],
-                loadingState: false,
+                loadingState: 0,
                 loadingIndex: 0,
             }
         },
@@ -205,22 +206,25 @@
                 if (!this.checkFormValidity()) {
                     return;
                 }
-                this.loadingState = true;
+                this.loadingState = 1;
                 this.$store.dispatch('papers/getPossiblePaper', {paper: this.paper})
                     .then(() => {
                         this.completedSteps = this.completedSteps.concat(0);
-                        console.log(this.completedSteps);
+                        // console.log(this.completedSteps);
                         this.$nextTick(() => this.activeTab = this.activeTab + 1)
-                        console.log(this.activeTab);
-                        console.log(this.$refs.tabs.value);
-                        this.loadingState = false;
+                        // console.log(this.activeTab);
+                        // console.log(this.$refs.tabs.value);
+                        this.loadingState = 0;
                         // this.$bvModal.hide('modal-new-entry')
                         // this.$bvModal.show('modal-select-add')
+                    }, (err) => {
+                        console.log(err)
+                        this.loadingState = -1;
                     });
             },
             handleSelection() {
                 this.completedSteps = this.completedSteps.concat(1);
-                console.log(this.completedSteps);
+                // console.log(this.completedSteps);
                 this.$nextTick(() => this.activeTab = this.activeTab + 1);
                 this.checked.map(p => {
                     this.loadingState = true;
@@ -231,15 +235,16 @@
                 });
                 this.loadingState = false;
                 this.$nextTick(() => this.completedSteps = this.completedSteps.concat(2));
-                console.log(this.completedSteps);
+                // console.log(this.completedSteps);
             },
-            handleSwitch(newIdx, oldIdx, evt) {
+            handleSwitch(newIdx) {
                 this.activeTab = newIdx;
+                this.loadingState = 0;
                 // maintain the completedSteps
-                console.log(this.completedSteps)
+                // console.log(this.completedSteps)
                 this.completedSteps = this.completedSteps.filter(elmt => elmt <= newIdx);
-                console.log(this.completedSteps)
-                console.log(newIdx, oldIdx, evt);
+                // console.log(this.completedSteps)
+                // console.log(newIdx, oldIdx, evt);
             },
             getClass(idx) {
                 if(idx === this.activeTab) {

@@ -95,7 +95,7 @@ const actions = {
 
     removeFilter({commit, state}, filter) {
         const filters = state.filters.filter(elmt => elmt !== filter)
-        console.log(filters);
+        // console.log(filters);
         // merge filters
         const criteria = filters.reduce((acc, elmt) => {
             const cr = elmt.criteria;
@@ -107,7 +107,16 @@ const actions = {
                 commit('setFilter', filters);
                 commit('setPapers', JSON.parse(newPaperList));
             })
-    }
+    },
+
+    removeAllFilters({commit}) {
+        return paperOperator.filterPapers({})
+            .then(newPaperList => {
+                commit('setPage', 1);
+                commit('setFilter', []);
+                commit('setPapers', JSON.parse(newPaperList));
+            })
+    },
 }
 
 // mutations
@@ -143,12 +152,13 @@ const mutations = {
         state.all.splice(idx, 1, updatedPaper);
     },
 
-    setPaperFieldForce({paper, field, v}) {
+    setPaperFieldForce(state, {paper, field, v}) {
         Vue.delete(paper, field);
         Vue.set(paper, field, v);
     },
 
-    setPaperField({paper, field, v}) {
+    setPaperField(state, {paper, field, v}) {
+        // console.log(field, v);
         Vue.set(paper, field, v);
     },
 

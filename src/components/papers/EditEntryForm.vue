@@ -20,20 +20,20 @@
                                 required
                                 rows="6"
                                 max-rows="6"
-                                @keyup="updatePaperField({paper, field, v: $event.target.value})"
+                                @keyup="updatePaperField({'paper': paper, 'field': field, 'v': $event.target.value})"
                                 :placeholder="'Enter paper '+field.toString().toLowerCase()"
                             ></b-form-textarea>
                             <b-form-input
                                 :value="paper[field]"
                                 v-else-if="paper[field] && typeof paper[field] !== 'object'"
-                                @keyup="updatePaperField({paper, field, v: $event.target.value})"
+                                @keyup="updatePaperField({paper, field: field, v: $event.target.value})"
                                 required
                                 :placeholder="'Enter paper '+field.toString().toLowerCase()"
                             ></b-form-input>
                             <b-form-tags
                                 :value="paper[field] || []"
                                 v-else
-                                @input="(v) => updatePaperField({paper, field, v})"
+                                @input="(v) => updatePaperField({'paper': paper, 'field': field, 'v': v})"
                                 required
                                 :placeholder="'paper '+field.toString().toLowerCase()+'s'"
                             ></b-form-tags>
