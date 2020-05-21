@@ -1,6 +1,6 @@
-import {fetch, baseRoute} from './utilities'
+import {baseRoute} from './utilities'
 
-export const addTask = ({paper, task}) => {
+const addTask = ({paper, task}) => {
     const route = baseRoute + '/task/add'
 
     const data = {paper, task}
@@ -12,4 +12,8 @@ export const addTask = ({paper, task}) => {
 
     return fetch(route, fetchOpts)
         .then(response => JSON.parse(response.text()));
+}
+
+export default {
+    addTask,
 }

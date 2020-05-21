@@ -29,6 +29,12 @@
                     </b-input-group-append>
                 </b-input-group>
             </b-form-group>
+            <b-button 
+                size="sm"
+                variant="outline-primary"
+                class="ml-3"
+                @click="exportBibtex()"
+                >Export Selected</b-button>
         </b-form-row>
         <b-table
             class="text-left px-5 pt-3"
@@ -61,15 +67,16 @@
 </template>
 
 <script>
-
 import {mapState} from 'vuex'
 
 export default {
+    name: 'ExportList',
     data() {
         return {
             selected: [],
             fields: ['select', 'title', 'author'],
             filter: '',
+            formula: 'A{\\({^2}\\)}I: abstract{\\({^2}\\)} interpretation',
         }
     },
     computed: {
@@ -77,5 +84,59 @@ export default {
             papers: state => state.papers.all
         }),
     },
+    methods: {
+        exportBibtex() {
+            this.$store.dispatch('papers/exportBibtex', this.selected)
+                .then((bibfile) => {
+                    this.$bvToast.toast('The bibtex file is exported successfully!', {
+                        title: 'Export',
+                        solid: true,
+                        varaint: 'success',
+                        'auto-hide-delay': 1000,
+                    })
+                    var element = document.createElement('a');
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(bibfile));
+                    element.setAttribute('download', 'export.bib');
+
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+
+                    element.click();
+
+                    document.body.removeChild(element);
+                })
+        }
+    },
+    // mounted(){
+    //     var sheet = new CSSStyleSheet
+    //     sheet.replaceSync('.page {font-family: Avenir, Helvetica, Arial !important; \
+    //                               font-size: 1rem !important; \
+    //                               display:inline-block; \
+    //                               overflow: hidden; \
+    //                               text-overflow: ellipsis; \
+    //                               white-space: nowrap;} ')
+    //     var elmts = document.getElementsByTagName('latex-js')
+    //     for(var e in elmts){
+    //         console.log(elmts[e].shadowRoot)
+    //         if(elmts[e].shadowRoot){
+    //             elmts[e].shadowRoot.adoptedStyleSheets = [sheet]
+    //         }
+    //         console.log(elmts[e].shadowRoot)
+    //     }
+    // },
 }
 </script>
+
+<style>
+latex-js {
+    display: inline-block;
+    --size: 1rem !important;
+    --marginleftwidth: 0 !important;
+    --marginrightwidth: 0 !important;
+    --marginparwidth: 0 !important;
+    --marginparsep: 0 !important;
+    --marginparpush: 0 !important;
+    --line-height: 1.25 !important;
+    line-height: 1.25rem;
+}
+</style>

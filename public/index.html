@@ -6,12 +6,19 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <script type="module">
+      import latexjs from "https://cdn.jsdelivr.net/npm/latex.js/dist/latex.component.esm.js"
+      customElements.define('latex-js', latexjs)
+      </script>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML"></script> -->
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+    </script>
   </body>
 </html>

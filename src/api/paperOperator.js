@@ -72,11 +72,24 @@ const deletePaper = (paper) => {
 }
 
 const uploadBibTex = (file) => {
-    const ROUTE = baseRoute + "import/bibtex";
+    const ROUTE = baseRoute + "bibtex/import";
 
     const fetchOpts = {
         method: 'POST', // or 'PUT'
         body: file,
+    };
+
+    return fetch(ROUTE, fetchOpts)
+        .then(response => response.text());
+}
+
+const exportBibTex = (entries) => {
+    const ROUTE = baseRoute + "bibtex/export";
+
+    console.log(entries)
+    const fetchOpts = {
+        method: 'POST', // or 'PUT'
+        body: JSON.stringify(entries),
     };
 
     return fetch(ROUTE, fetchOpts)
@@ -102,5 +115,6 @@ export default {
     deletePaper,
     updatePaper,
     uploadBibTex,
+    exportBibTex,
     filterPapers,
 }

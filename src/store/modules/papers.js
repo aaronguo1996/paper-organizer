@@ -10,7 +10,6 @@ const state = {
     // temporary states
     filters: [],
     uploadState: null,
-    exportSelections: [],
     addCandidates: [],
 }
 
@@ -53,6 +52,11 @@ const actions = {
                 Promise.reject(error);
                 commit('setUploadError');
             });
+    },
+
+    exportBibtex({commit},entries) {
+        commit('setUploadError');
+        return paperOperator.exportBibTex(entries);
     },
 
     resetUploadState({commit}) {
@@ -114,13 +118,6 @@ const mutations = {
 
     setPapers (state, papers) {
         state.all = papers
-    },
-
-    pushPaper () {
-    },
-
-    // maybe do not need
-    markPaperSelected() {
     },
 
     candPapers(state, papers) {

@@ -9,7 +9,7 @@
                     <div class="tag tag-unread"
                     v-else></div>
                 </b-col>
-                <b-col class="pl-0 py-3">
+                <b-col class="px-0 py-3">
                     <b-row class="mx-0 pt-2 px-3">
                         <h5> {{paper.title}}</h5>
                     </b-row>
@@ -23,7 +23,7 @@
                                 })"
                             class="text-secondary"
                             >
-                            {{a}}<span v-if="i !== paper.author.length - 1">;</span>
+                            {{a}}<span v-if="i !== paper.author.length - 1" class="mr-1">;</span>
                         </b-link>
                     </b-row>
                     <b-row v-if="paper.keyword || paper.tags"
@@ -43,7 +43,7 @@
                         </b-col>
                     </b-row>
                 </b-col>
-                <b-col style="flex-grow: 0 !important" class="pr-4 pt-3">
+                <b-col style="flex-grow: 0 !important" class="pr-5 pt-3">
                     <b-dropdown size="sm" toggle-class="text-decoration-none" variant="link" no-caret>
                         <template v-slot:button-content>
                             <b-icon-three-dots-vertical/>

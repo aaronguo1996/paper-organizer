@@ -1,5 +1,7 @@
 import bibtexparser
 from bibtexparser.bparser import BibTexParser
+from bibtexparser.bwriter import BibTexWriter
+from pylatexenc.latexencode import unicode_to_latex
 from database import *
 
 def read_bibtex(bibtex_str):
@@ -8,9 +10,31 @@ def read_bibtex(bibtex_str):
     parser.homogenize_fields = True
     bib_database = parser.parse(bibtex_str)
     keyworded = map(bibtexparser.customization.keyword, bib_database.entries)
-    converted = map(bibtexparser.customization.convert_to_unicode, keyworded)
+    converted = list(map(bibtexparser.customization.convert_to_unicode, keyworded))
     authored = map(bibtexparser.customization.author, converted)
     return list(authored)
+
+def write_bibtex(bibtex_entries):
+    bib_database = bibtexparser.bibdatabase.BibDatabase()
+
+    for e in bibtex_entries:
+        # pop the useless contents
+        e.pop('created_time', None)
+        e.pop('file', None)
+        e.pop('abstract', None)
+        for k in e:
+            if isinstance(e[k], list):
+                e[k] = ' and '.join(e[k])
+            e[k] = unicode_to_latex(e[k])
+    bib_database.entries = bibtex_entries
+
+    writer = BibTexWriter()
+    writer.contents = ['comments', 'entries']
+    writer.indent = '  '
+    writer.order_entries_by = ('ENTRYTYPE', 'author', 'year')
+    bibtex_str = bibtexparser.dumps(bib_database, writer)
+
+    return bibtex_str
 
 def add_db_papers(results):
     # store results to the database

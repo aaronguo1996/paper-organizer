@@ -1,18 +1,23 @@
 from flask import Flask, request, json
-from apis import read_bibtex, get_db_papers, update_db_paper, delete_db_paper, search_paper
+from apis import read_bibtex, write_bibtex, get_db_papers, update_db_paper, delete_db_paper, search_paper, add_db_papers
 from scholar import search_by_title
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/import/bibtex', methods=['GET','POST'])
+@app.route('/bibtex/import', methods=['GET','POST'])
 def import_from_bibtex():
     bibtex_file = request.data
     str_bibtex = bibtex_file.decode('utf-8')
     contents = read_bibtex(str_bibtex)
-    print(contents[0])
+    add_db_papers(contents)
     return json.jsonify(contents)
+
+@app.route('/bibtex/export', methods=['GET','POST'])
+def export_bibtex():
+    bibtex_entries = json.loads(request.data)
+    return write_bibtex(bibtex_entries)
 
 @app.route('/paper/all', methods=['GET','POST'])
 def all_papers():
