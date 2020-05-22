@@ -15,6 +15,46 @@ const state = {
 
 // getters
 const getters = {
+    groupByTags(state) {
+        const isYear = (tag) => /^\d+$/.test(tag);
+        const isConf = (tag) => /^[A-Z]+$/.test(tag);
+        const addTag = (tag, acc, elmt) => {
+            const t = tag.charAt(0).toUpperCase() + tag.slice(1)
+            if(t in acc) {
+                acc[t] = acc[t].concat(elmt);
+            } else {
+                acc[t] = [elmt];
+            }
+            return acc;
+        }
+        return state.all.reduce((acc, elmt) => {
+            if(!elmt['tags']) {
+                if(acc['Topic']['Other']){
+                    acc['Topic']['Other'] = acc['Topic']['Other'].concat(elmt);
+                } else {
+                    acc['Topic']['Other'] = [elmt];
+                }
+                return acc;
+            } else {
+                const tags = elmt['tags']
+                for(const k in tags) {
+                    const tag = tags[k];
+                    if(isYear(tag)) {
+                        acc['Year'] = addTag(tag, acc['Year'], elmt);
+                    } else if(isConf(tag)) {
+                        acc['Conference'] = addTag(tag, acc['Conference'], elmt);
+                    } else {
+                        acc['Topic'] = addTag(tag, acc['Topic'], elmt);
+                    }
+                }
+                return acc;
+            }
+        }, {
+            'Year': {},
+            'Conference': {},
+            'Topic': {},
+        })
+    },
 }
 
 // actions

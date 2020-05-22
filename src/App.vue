@@ -1,14 +1,16 @@
 <template>
     <div id="app" class="mx-0 px-0">
         <SideBar/>
-        <AllPapers v-if="display==='allPapers'"/>
-        <ExportList v-if="display==='export'"/>
+        <AllPapers id="allPapers" v-if="display==='allPapers'"/>
+        <ExportList id="export" v-if="display==='export'"/>
+        <AllTags id="allTags" v-if="display==='allTags'"/>
     </div>
 </template>
 
 <script>
 import SideBar from './components/SideBar.vue'
 import AllPapers from './components/papers/AllPapers.vue'
+import AllTags from './components/tags/AllTags.vue'
 import ExportList from './components/papers/ExportList.vue'
 import {mapState} from 'vuex'
 
@@ -18,6 +20,7 @@ export default {
         AllPapers,
         SideBar,
         ExportList,
+        AllTags,
     },
     computed: {
         ...mapState({
