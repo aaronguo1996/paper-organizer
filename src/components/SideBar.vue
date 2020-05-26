@@ -43,21 +43,25 @@
         methods: {
             ...mapActions('papers', {
                 filterPaper: 'filterPaperBy',
+                clearFilter: 'removeAllFilters',
             }),
             ...mapActions({
                 setDisplay: 'changeDisplay',
             }),
             handleSubmit() {
                 this.setDisplay('allPapers');
-                this.filterPaper({
-                    criteria: {'$or':[
-                        {'title': {'$regex': '.*'+this.searchKey+'.*', '$options': 'i',}},
-                        {'author':{'$regex': '.*'+this.searchKey+'.*', '$options': 'i'}},
-                        {'keyword':{'$elemMatch':{'$regex': '.*'+this.searchKey+'.*', '$options': 'i'}}},
-                        {'tags':{'$elemMatch':{'$regex': '.*'+this.searchKey+'.*', '$options': 'i'}}},
-                    ]},
-                    display: 'all: ' + this.searchKey
-                })
+                this.clearFilter()
+                    .then(() => {
+                        this.filterPaper({
+                            criteria: {'$or':[
+                                {'title': {'$regex': '.*'+this.searchKey+'.*', '$options': 'i',}},
+                                {'author':{'$regex': '.*'+this.searchKey+'.*', '$options': 'i'}},
+                                {'keyword':{'$elemMatch':{'$regex': '.*'+this.searchKey+'.*', '$options': 'i'}}},
+                                {'tags':{'$elemMatch':{'$regex': '.*'+this.searchKey+'.*', '$options': 'i'}}},
+                            ]},
+                            display: 'all: ' + this.searchKey
+                        })}
+                    )
             }
         }
     }

@@ -30,7 +30,7 @@
                         class="mx-0">
                         <b-col>
                         <b-button
-                            v-for="t in ([].concat(paper.keyword, paper.tags))"
+                            v-for="t in ([...paper.keyword, ...paper.tags])"
                             :key="t"
                             variant="outline-primary"
                             class="mr-1 badge font-weight-bold"

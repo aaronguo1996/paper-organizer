@@ -125,37 +125,37 @@ const actions = {
     filterPaperBy({commit}, {criteria, display}) {
         const filters = state.filters.map(elmt => elmt.criteria)
         const newCriteria = {'$and':filters.concat(criteria)}
-        return paperOperator.filterPapers({criteria:newCriteria})
-            .then(newPaperList => {
+        return paperOperator.filterPapers({ criteria: newCriteria })
+            .then((newPaperList) => {
                 commit('setPage', 1);
-                commit('addFilter', {criteria, display});
+                commit('addFilter', { criteria, display });
                 commit('setPapers', JSON.parse(newPaperList));
             })
+        
     },
 
     removeFilter({commit, state}, filter) {
-        const filters = state.filters.filter(elmt => elmt !== filter)
+        const filters = state.filters
+                            .filter(elmt => elmt !== filter)
+                            .map(elmt => elmt.criteria);
         // console.log(filters);
         // merge filters
-        const criteria = filters.reduce((acc, elmt) => {
-            const cr = elmt.criteria;
-            return {'$and': [cr, acc]};
-        }, {})
-        return paperOperator.filterPapers({criteria: criteria})
-            .then(newPaperList => {
+        const criteria = filters.length === 0 ? {} : {'$and': filters};
+        return paperOperator.filterPapers({ criteria: criteria })
+            .then((newPaperList) => {
                 commit('setPage', 1);
                 commit('setFilter', filters);
                 commit('setPapers', JSON.parse(newPaperList));
-            })
+            });
     },
 
     removeAllFilters({commit}) {
-        return paperOperator.filterPapers({})
-            .then(newPaperList => {
+        return paperOperator.filterPapers({ criteria: {}})
+            .then((newPaperList) => {
                 commit('setPage', 1);
                 commit('setFilter', []);
                 commit('setPapers', JSON.parse(newPaperList));
-            })
+            });
     },
 }
 
