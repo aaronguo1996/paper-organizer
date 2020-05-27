@@ -23,10 +23,10 @@
                 <!-- <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button> -->
             </b-nav-form>
 
-            <b-nav-item link-classes="nav-bar-link" href="#allPapers" @click="setDisplay('allPapers')">All Papers</b-nav-item>
+            <b-nav-item link-classes="nav-bar-link" href="#allPapers" @click="locate('allPapers')">All Papers</b-nav-item>
             <b-nav-item link-classes="nav-bar-link" >Read Progress</b-nav-item>
-            <b-nav-item link-classes="nav-bar-link" href="#allTags" @click="setDisplay('allTags')">Tags</b-nav-item>
-            <b-nav-item link-classes="nav-bar-link" href="#export" @click="setDisplay('export')">Export</b-nav-item>
+            <b-nav-item link-classes="nav-bar-link" href="#allTags" @click="locate('allTags')">Tags</b-nav-item>
+            <b-nav-item link-classes="nav-bar-link" href="#export" @click="locate('export')">Export</b-nav-item>
         </b-navbar-nav>
     </b-navbar>
 </template>
@@ -48,6 +48,12 @@
             ...mapActions({
                 setDisplay: 'changeDisplay',
             }),
+            locate(v) {
+                this.clearFilter()
+                    .then(() => {
+                        this.setDisplay(v);
+                    })
+            },
             handleSubmit() {
                 this.setDisplay('allPapers');
                 this.clearFilter()
